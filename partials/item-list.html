@@ -1,0 +1,19 @@
+<h1>Todo List</h1>
+<!-- TODO: Repeat over our todo list items and setup filtering by search term. Easy peasy -->
+<div ng-repeat="item in items | filter: {task: searchText.search}">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="col-xs-1"><input type="checkbox" name=""/></div>
+      <div class="col-xs-2"><a ng-href="#/items/view/{{item.id}}">{{item.task}}</a></div>
+      <!-- ng-href is companion to another directive called ng-src,
+      when HTML loads, it scans for links and tries to get them first.
+      sometimes compilation isn't finished (angular isnt finished). the ng
+      tells browser to wait until angular is finished turning it into a proper link -->
+      <div class="col-xs-2">{{item.dueDate}}</div>
+      <div class="col-xs-1">{{item.assignedTo}}</div>
+      <div class="col-xs-1"><a ng-href="#/items/edit/{{item.id}}">Edit</a></div>
+      <div class="col-xs-1"><button class="btn btn-danger" ng-click="itemDelete(item.id)">X</button></div>
+
+    </div>
+  </div>
+</div>

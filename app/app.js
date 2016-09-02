@@ -1,65 +1,34 @@
 //app.js is our entry file, our jumping off point
 "use strict";
 
-var app = angular.module("TodoApp", []);
+//******************************************************************//
+// ngRoute is the name of the module inside the angular.min.js file
+// the same way that "TodoApp" is the name of the module in the app.js
+//******************************************************************//
+var app = angular.module("TodoApp", ["ngRoute"])
+    .constant("FirebaseURL", "https://todoapp-5a055.firebaseio.com/");//definig a variable called Firebase with a value of a specific URL
 
-//NavCtrl controller function
-app.controller("NavCtrl", function($scope){
-    $scope.navItems = [
-        {name: "Logout"},
-        {name: "All Items"},
-        {name: "New Items"}
-    ];
+app.config(function($routeProvider){
+    $routeProvider
+        .when("/items/list", {
+            templateUrl: "partials/item-list.html",//templateUrl - the U is big, the rl are not!
+            controller: "ItemListCtrl"
+        })
+        .when("/items/new", {
+            templateUrl: "partials/item-form.html",
+            controller: "ItemNewCtrl"
+        })
+        .when("/items/view/:itemId", {
+            templateUrl: "partials/item-details.html",
+            controller: "ItemViewCtrl"
+        //itemId is a placeholder for any ID. after item/: -
+        //anything after colon will be saved in a variable called itemId
+        })
+        .when("/items/edit/:itemId", {
+            templateUrl: "partials/item-form-edit.html",
+            controller: "ItemEditCtrl"
+        })
+        .otherwise("/items/list");  //if user tries to reroute to somewhere else,
+        //it sends them back to list
 
 });
-
-app.controller("TodoCtrl", function($scope){
-    $scope.items = [
-      {
-        id: 0,
-        task: "mow the lawn",
-        isCompleted: false,
-        dueDate: "12/5/17",
-        assignedTo: "Greg",
-        location: "Joe's house",
-        urgency: "low",
-        dependencies: "sunshine, clippers, hat, water, headphones"
-      },
-      {
-        id: 1,
-        task: "grade quizzes",
-        isCompleted: false,
-        dueDate: "12/5/15",
-        assignedTo: "Christina",
-        location: "NSS",
-        urgency: "high",
-        dependencies: "wifi, tissues, vodka"
-      },
-      {
-        id: 2,
-        task: "take a nap",
-        isCompleted: false,
-        dueDate: "5/21/16",
-        assignedTo: "Joe",
-        location: "Porch of lakefront cabin",
-        urgency: "medium",
-        dependencies: "hammock, silence"
-      },
-    ];
-
-    $scope.newTask = {};//new properties on this object are being created in the DOM via ng-model:="newTask.blahblah"
-    $scope.showListView = true;
-    $scope.newItem = function(){
-        $scope.showListView = false;
-    };
-    $scope.allItem = function(){
-        $scope.showListView = true;
-    };
-    $scope.addNewItem = function(){
-        $scope.newTask.isCompleted = false;
-        $scope.newTask.id = $scope.items.length;//makes new tasks' ids equal to their position in the array
-        $scope.items.push($scope.newTask);
-        $scope.newTask = {};
-    };
-});
-
